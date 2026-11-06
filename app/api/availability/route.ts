@@ -1,0 +1,2 @@
+import {NextRequest} from 'next/server';import {dateOK,slots,taken,fail} from '../../../lib/core';
+export async function GET(req:NextRequest){try{const day=req.nextUrl.searchParams.get('date')||'';if(!dateOK(day))return fail('Fecha inválida');const all=await slots(day),busy=await taken(day);return Response.json({date:day,slots:all.map(time=>({time,available:!busy.has(time)}))})}catch{return fail('No fue posible consultar la disponibilidad',500)}}
